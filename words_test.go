@@ -46,6 +46,15 @@ func TestGetWordOfTheDay(t *testing.T) {
 	}
 }
 
+var SearchTestCases = []struct {
+	query        string
+	options      []QueryOption
+	expectResult bool
+}{
+	{"dem", []QueryOption{}, true},
+	{"dem", []QueryOption{CaseSensitive(true), IncludePartOfSpeech([]string{"noun"}), ExcludePartOfSpeech([]string{"adjective"}), MinCorpusCount(100), MaxCorpusCount(-1), MinDictionaryCount(1), MaxDictionaryCount(-1), MinLength(5), MaxLength(15), Skip(0), Limit(15)}, false},
+}
+
 func TestSearch(t *testing.T) {
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -53,10 +62,25 @@ func TestSearch(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	//TODO: finish tests
-	//search with default options
-	_, _ = cl.Search("dem")
 
-	//search having set all options
-	_, _ = cl.Search("dem", CaseSensitive(true), IncludePartOfSpeech([]string{"noun"}), ExcludePartOfSpeech([]string{"adjective"}), MinCorpusCount(100), MaxCorpusCount(-1), MinDictionaryCount(1), MaxDictionaryCount(-1), MinLength(5), MaxLength(15), Skip(0), Limit(15))
+	_, err = cl.Search("")
+	if err == nil {
+		t.Error("Expected error for empty query")
+	}
+
+	for _, testCase := range SearchTestCases {
+		res, err := cl.Search(testCase.query, testCase.options...)
+		if err != nil {
+			t.Error("Unexpected error")
+		}
+
+		if res.TotalResults == 0 && testCase.expectResult {
+			t.Errorf("Expected at least one result for query '%v'", testCase.query)
+		}
+
+		if res.TotalResults > 0 && res.SearchResults[0].Word != testCase.query {
+			t.Errorf("Query '%v' not returned as first result", testCase.query)
+		}
+
+	}
 }

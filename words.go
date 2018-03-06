@@ -96,13 +96,13 @@ func (c *Client) Search(query string, queryOptions ...QueryOption) (WordSearchRe
 
 	req, err := c.formRequest(rel, q, "GET")
 	if err != nil {
-		return WordSearchResults{}, nil
+		return WordSearchResults{}, err
 	}
 
 	var results WordSearchResults
 	err = c.doRequest(req, &results)
 	if err != nil {
-		return WordSearchResults{}, nil
+		return WordSearchResults{}, err
 	}
 
 	return results, nil
