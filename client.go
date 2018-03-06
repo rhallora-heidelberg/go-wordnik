@@ -28,10 +28,15 @@ func NewClient(key string) Client {
 
 func (c *Client) formRequest(relativePath *url.URL, vals url.Values, method string) (*http.Request, error) {
 	u := c.baseURL.ResolveReference(relativePath)
-	vals.Set("api_key", c.apiKey)
 	u.RawQuery = vals.Encode()
+	request, err := http.NewRequest(method, u.String(), nil)
+	if err != nil {
+		return request, err
+	}
 
-	return http.NewRequest(method, u.String(), nil)
+	request.Header["api_key"] = []string{c.apiKey}
+	request.Header["Content-type"] = []string{"application/json"}
+	return request, nil
 }
 
 func (c *Client) doRequest(req *http.Request, dst interface{}) error {
