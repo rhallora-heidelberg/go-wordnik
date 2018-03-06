@@ -45,7 +45,7 @@ For endpoints with many optional query parameters, such as Search, this project 
   //...
 ```
 
-If you need to set the same parameters on a regular basis, you can define your own functions which fit the QueryOption definition in [queryOptions.go](queryOptions.go), something like this:
+If you need to set the same parameters on a regular basis, you can define your own functions which fit the QueryOption definition in [queryOptions.go](queryOptions.go):
 ```golang
   //  type QueryOption func(*url.Values)
   func LongListOfLongNouns() wordnik.QueryOption {
@@ -59,6 +59,11 @@ If you need to set the same parameters on a regular basis, you can define your o
 
 ```
 
+## Running The Tests
+In order to run the included tests, you'll need to provide an API key via the [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html) WORDNIK_API_KEY. There are a number of ways to do this, but here's a simple one-off for the command line:
+```sh
+WORDNIK_API_KEY="YOUR_KEY_HERE" go test
+```
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
