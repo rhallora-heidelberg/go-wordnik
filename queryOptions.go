@@ -38,14 +38,18 @@ var (
 	}
 )
 
+// Modifies optional query parameters via returned functions which act on
+// url.Values pointers.
 type QueryOption func(*url.Values)
 
+// Sets the caseSensitive parameter based on boolean input
 func CaseSensitive(b bool) QueryOption {
 	return func(q *url.Values) {
 		q.Set("caseSensitive", strconv.FormatBool(b))
 	}
 }
 
+// Sets the includePartOfSpeech parameter based on string slice input
 func IncludePartOfSpeech(parts []string) QueryOption {
 	return func(q *url.Values) {
 		var builder strings.Builder
@@ -60,6 +64,7 @@ func IncludePartOfSpeech(parts []string) QueryOption {
 	}
 }
 
+// Sets the excludePartOfSpeech parameter based on string slice input
 func ExcludePartOfSpeech(parts []string) QueryOption {
 	return func(q *url.Values) {
 		var builder strings.Builder
@@ -74,48 +79,56 @@ func ExcludePartOfSpeech(parts []string) QueryOption {
 	}
 }
 
+// Sets the minCorpusCount parameter based on integer input
 func MinCorpusCount(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("minCorpusCount", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the maxCorpusCount parameter based on integer input
 func MaxCorpusCount(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("maxCorpusCount", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the minDictionaryCount parameter based on integer input
 func MinDictionaryCount(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("minDictionaryCount", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the maxDictionaryCount parameter based on integer input
 func MaxDictionaryCount(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("maxDictionaryCount", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the minLength parameter based on integer input
 func MinLength(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("minLength", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the maxLength parameter based on integer input
 func MaxLength(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("maxLength", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the skip parameter based on integer input
 func Skip(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("skip", strconv.FormatInt(n, 10))
 	}
 }
 
+// Sets the limit parameter based on integer input
 func Limit(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("limit", strconv.FormatInt(n, 10))

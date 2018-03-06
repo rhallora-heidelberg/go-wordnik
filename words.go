@@ -5,17 +5,20 @@ import (
 	"net/url"
 )
 
+// Wordnik WordSearchResult as defined by the API
 type WordSearchResult struct {
 	Count      int64   `json:"count"`
 	Lexicality float64 `json:"lexicality"`
 	Word       string  `json:"word"`
 }
 
+// Wordnik wordSearchResults as defined by the API
 type WordSearchResults struct {
 	SearchResults []WordSearchResult `json:"searchResults"`
 	TotalResults  int64              `json:"totalResults"`
 }
 
+// Wordnik wordOfTheDay as defined by the API
 type WordOfTheDay struct {
 	ID              int64              `json:"id"`
 	ParentID        string             `json:"parentId"`
@@ -31,11 +34,13 @@ type WordOfTheDay struct {
 	PublishDate     string             `json:"publishDate"`
 }
 
+// Wordnik contentProvider as defined by the API
 type ContentProvider struct {
 	ID   int64  `json:"is"`
 	Name string `json:"name"`
 }
 
+// Wordnik simpleDefinition as defined by the API
 type SimpleDefinition struct {
 	Text         string `json:"text"`
 	Source       string `json:"source"`
@@ -43,6 +48,7 @@ type SimpleDefinition struct {
 	PartOfSpeech string `json:"partOfSpeech"`
 }
 
+// Wordnik simpleExample as defined by the API
 type SimpleExample struct {
 	ID    int64  `json:"is"`
 	Title string `json:"title"`
@@ -50,6 +56,8 @@ type SimpleExample struct {
 	URL   string `json:"url"`
 }
 
+// Returns the word of the day for a given date string in the format
+// "yyyy-MM-dd".
 func (c *Client) GetWordOfTheDay(dateString string) (WordOfTheDay, error) {
 	rel := &url.URL{Path: "words.json/wordOfTheDay"}
 
@@ -70,6 +78,9 @@ func (c *Client) GetWordOfTheDay(dateString string) (WordOfTheDay, error) {
 	return wotd, nil
 }
 
+// Returns the results of a word search. Returns an error for empty input,
+// but other 'incorrect' parameters are left to the APIs discretion. Configured
+// with QueryOption functions, which ensure basic parameter vailidity.
 func (c *Client) Search(query string, queryOptions ...QueryOption) (WordSearchResults, error) {
 	if query == "" {
 		return WordSearchResults{}, errors.New("empty query string not allowed")
