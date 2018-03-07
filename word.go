@@ -1,6 +1,6 @@
 package wordnik
 
-// Wordnik WordObject as defined by the API
+// The WordObject as defined by the Wordnik API.
 type WordObject struct {
 	ID            int64    `json:"id"`
 	Word          string   `json:"word"`

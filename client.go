@@ -11,15 +11,15 @@ const (
 	base = "http://api.wordnik.com/v4/"
 )
 
-// http.Client wrapper which stores an API key and base url.
+// Client is an http.Client wrapper which stores an API key and base url.
 type Client struct {
 	apiKey  string
 	baseURL *url.URL
 	client  *http.Client
 }
 
-// Creates a Client with the specified API key. The http.Client component
-// is configured with a 10-second timeout.
+// NewClient creates a Client with the specified API key. The http.Client
+// component is configured with a 10-second timeout.
 func NewClient(key string) *Client {
 	baseURL, err := url.Parse(base)
 	if err != nil {

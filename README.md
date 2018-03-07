@@ -3,6 +3,8 @@
 Unofficial Go library for the [Wordnik](https://www.wordnik.com/) API
 
 [![Build Status](https://travis-ci.org/rhallora-heidelberg/go-wordnik.svg?branch=master)](https://travis-ci.org/rhallora-heidelberg/go-wordnik)
+[![Go Report Card](https://goreportcard.com/badge/github.com/rhallora-heidelberg/go-wordnik)](https://goreportcard.com/report/github.com/rhallora-heidelberg/go-wordnik)
+[![Documentation](https://godoc.org/github.com/rhallora-heidelberg/go-wordnik?status.svg)](http://godoc.org/github.com/rhallora-heidelberg/go-wordnik)
 
 ## Basic Usage
 ```golang
