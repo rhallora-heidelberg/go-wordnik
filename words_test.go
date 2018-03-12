@@ -84,3 +84,45 @@ func TestSearch(t *testing.T) {
 
 	}
 }
+
+var RevDictTestCases = []struct {
+	query        string
+	options      []QueryOption
+	expectResult bool
+	expectedWord string
+}{
+	{"having the bad qualities of a dog", []QueryOption{}, true, "doggish"},
+}
+
+func TestRevDict(t *testing.T) {
+	testAPIKey, err := getEnvKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cl := NewClient(testAPIKey)
+
+	_, err = cl.ReverseDictionary("")
+	if err == nil {
+		t.Error("Expected error for empty query")
+	}
+
+	for _, testCase := range RevDictTestCases {
+		res, err := cl.ReverseDictionary(testCase.query, testCase.options...)
+		if err != nil {
+			t.Error("Unexpected error")
+		}
+
+		if res.TotalResults == 0 && testCase.expectResult {
+			t.Errorf("Expected at least one result for query '%v'", testCase.query)
+		}
+
+		if res.TotalResults > 0 && !testCase.expectResult {
+			t.Errorf("Did not expect results for query '%v'", testCase.query)
+		}
+
+		if res.TotalResults > 0 && res.Results[0].Word != testCase.expectedWord {
+			t.Errorf("Query '%v' did not return '%v' as first result", testCase.query, testCase.expectedWord)
+		}
+	}
+}

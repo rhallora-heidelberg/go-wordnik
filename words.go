@@ -56,6 +56,75 @@ type SimpleExample struct {
 	URL   string `json:"url"`
 }
 
+// DefinitionSearchResults as defined by the Wordnik API.
+type DefinitionSearchResults struct {
+	Results      []Definition `json:"results"`
+	TotalResults int64        `json:"totalResults"`
+}
+
+// Definition as defined by the Wordnik API.
+type Definition struct {
+	ExtendedText     string        `json:"extendedText"`
+	Text             string        `json:"text"`
+	SourceDictionary string        `json:"sourceDictionary"`
+	Citations        []Citation    `json:"citations"`
+	Labels           []Label       `json:"labels"`
+	Score            float64       `json:"score"`
+	ExampleUses      []ExampleUse  `json:"exampleUses"`
+	AttributionURL   string        `json:"attributionUrl"`
+	SeqString        string        `json:"seqString"`
+	AttributionText  string        `json:"attributionText"`
+	RelatedWords     []RelatedWord `json:"relatedWords"`
+	Sequence         string        `json:"sequence"`
+	Word             string        `json:"word"`
+	Notes            []Note        `json:"notes"`
+	TextProns        []TextPron    `json:"textProns"`
+	PartOfSpeech     string        `json:"partOfSpeech"`
+}
+
+// Citation as defined by the Wordnik API.
+type Citation struct {
+	Cite   string `json:"cite"`
+	Source string `json:"source"`
+}
+
+// Label as defined by the Wordnik API.
+type Label struct {
+	Text string `json:"text"`
+	Type string `json:"type"`
+}
+
+// ExampleUse as defined by the Wordnik API.
+type ExampleUse struct {
+	Text string `json:"text"`
+}
+
+// RelatedWord as defined by the Wordnik API.
+type RelatedWord struct {
+	Label1           string   `json:"label1"`
+	RelationshipType string   `json:"relationshipType"`
+	Label2           string   `json:"label2"`
+	Label3           string   `json:"label3"`
+	Words            []string `json:"words"`
+	Gram             string   `json:"gram"`
+	Label4           string   `json:"label4"`
+}
+
+// Note as defined by the Wordnik API.
+type Note struct {
+	NoteType  string   `json:"noteType"`
+	AppliesTo []string `json:"appliesTo"`
+	Value     string   `json:"value"`
+	Pos       int64    `json:"pos"`
+}
+
+// TextPron as defined by the Wordnik API.
+type TextPron struct {
+	Raw     string `json:"raw"`
+	Seq     int64  `json:"seq"`
+	RawType string `json:"rawType"`
+}
+
 // GetWordOfTheDay returns the word of the day for a given date string in the
 // format "yyyy-MM-dd".
 func (c *Client) GetWordOfTheDay(dateString string) (WordOfTheDay, error) {
@@ -114,6 +183,48 @@ func (c *Client) Search(query string, queryOptions ...QueryOption) (WordSearchRe
 	err = c.doRequest(req, &results)
 	if err != nil {
 		return WordSearchResults{}, err
+	}
+
+	return results, nil
+}
+
+// ReverseDictionary returns the result of a reverse dictionary search. Returns
+// an error for empty input, but other 'incorrect' parameters are left to the
+// APIs discretion. Configured with QueryOption functions, which ensure basic
+// parameter vailidity. See Wordnik docs for appropriate parameters:
+// http://developer.wordnik.com/docs.html#!/words/reverseDictionary_get_2
+func (c *Client) ReverseDictionary(query string, queryOptions ...QueryOption) (DefinitionSearchResults, error) {
+	if query == "" {
+		return DefinitionSearchResults{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "words.json/reverseDictionary"}
+
+	// Default Query Values
+	q := url.Values{
+		"query":          []string{query},
+		"minCorpusCount": []string{"5"},
+		"maxCorpusCount": []string{"-1"},
+		"minLength":      []string{"1"},
+		"maxLength":      []string{"-1"},
+		"includeTags":    []string{"false"},
+		"skip":           []string{"0"},
+		"limit":          []string{"10"},
+	}
+
+	for _, option := range queryOptions {
+		option(&q)
+	}
+
+	req, err := c.formRequest(rel, q, "GET")
+	if err != nil {
+		return DefinitionSearchResults{}, err
+	}
+
+	var results DefinitionSearchResults
+	err = c.doRequest(req, &results)
+	if err != nil {
+		return DefinitionSearchResults{}, err
 	}
 
 	return results, nil
