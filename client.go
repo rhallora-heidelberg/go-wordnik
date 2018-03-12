@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	base = "http://api.wordnik.com/v4/"
+	base = "https://api.wordnik.com/v4/"
 )
 
 // Client is an http.Client wrapper which stores an API key and base url.
