@@ -69,7 +69,7 @@ type Definition struct {
 	SourceDictionary string        `json:"sourceDictionary"`
 	Citations        []Citation    `json:"citations"`
 	Labels           []Label       `json:"labels"`
-	Score            float64       `json:"score"`
+	Score            float64       `json:"score"` //'NaN' will be zero-valued
 	ExampleUses      []ExampleUse  `json:"exampleUses"`
 	AttributionURL   string        `json:"attributionUrl"`
 	SeqString        string        `json:"seqString"`
@@ -223,9 +223,12 @@ func (c *Client) ReverseDictionary(query string, queryOptions ...QueryOption) (D
 
 	var results DefinitionSearchResults
 	err = c.doRequest(req, &results)
-	if err != nil {
-		return DefinitionSearchResults{}, err
+
+	if err != nil && err.Error() == "json: cannot unmarshal string into Go struct field Definition.score of type float64" {
+		// This error can be ignored, as it means that 'NaN' was present and will
+		// be zero-valued, as we would have done anyway.
+		err = nil
 	}
 
-	return results, nil
+	return results, err
 }
