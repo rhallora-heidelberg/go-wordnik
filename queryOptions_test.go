@@ -261,3 +261,12 @@ var sortOrderTests = []stringQueryTest{
 func TestSortOrder(t *testing.T) {
 	queryTestStrings(t, sortOrderTests, SortOrder)
 }
+
+var hasDictionaryDefTests = []boolQueryTest{
+	{true, "hasDictionaryDef=true"},
+	{false, "hasDictionaryDef=false"},
+}
+
+func TestHasDictionaryDef(t *testing.T) {
+	queryTestBools(t, hasDictionaryDefTests, HasDictionaryDef)
+}

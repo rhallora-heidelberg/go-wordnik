@@ -232,3 +232,36 @@ func (c *Client) ReverseDictionary(query string, queryOptions ...QueryOption) (D
 
 	return results, err
 }
+
+// RandomWord returns a random word as a WordObject, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity. See Wordnik docs for appropriate parameters:
+// http://developer.wordnik.com/docs.html#!/words/getRandomWord_get_4
+func (c *Client) RandomWord(queryOptions ...QueryOption) (WordObject, error) {
+	rel := &url.URL{Path: "words.json/randomWord"}
+
+	// Default values
+	q := url.Values{
+		"hasDictionaryDef":   []string{"false"},
+		"minCorpusCount":     []string{"0"},
+		"maxCorpusCount":     []string{"-1"},
+		"minDictionaryCount": []string{"1"},
+		"maxDictionaryCount": []string{"-1"},
+		"minLength":          []string{"5"},
+		"maxLength":          []string{"-1"},
+	}
+
+	for _, option := range queryOptions {
+		option(&q)
+	}
+
+	req, err := c.formRequest(rel, q, "GET")
+	if err != nil {
+		return WordObject{}, err
+	}
+
+	var results WordObject
+	err = c.doRequest(req, &results)
+
+	return results, err
+}

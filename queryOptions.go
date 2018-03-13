@@ -216,3 +216,10 @@ func SortOrder(direction string) QueryOption {
 		}
 	}
 }
+
+// HasDictionaryDef sets the hasDictionaryDef parameter based on string input.
+func HasDictionaryDef(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("hasDictionaryDef", strconv.FormatBool(b))
+	}
+}

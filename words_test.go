@@ -128,3 +128,33 @@ func TestRevDict(t *testing.T) {
 		}
 	}
 }
+
+func TestRandomWord(t *testing.T) {
+	testAPIKey, err := getEnvKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cl := NewClient(testAPIKey)
+
+	// Expect no result
+	res, _ := cl.RandomWord(MinCorpusCount(2), MaxCorpusCount(1))
+	if res.Word != "" {
+		t.Error("Expected no result")
+	}
+
+	// Expect both to return a result of appropriate length
+	res, err = cl.RandomWord(MinLength(5), MaxLength(5))
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	} else if len(res.Word) != 5 {
+		t.Error("expected a result of length 5")
+	}
+
+	res, err = cl.RandomWord(MinLength(6), MaxLength(6))
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	} else if len(res.Word) != 6 {
+		t.Error("expected a result of length 6")
+	}
+}
