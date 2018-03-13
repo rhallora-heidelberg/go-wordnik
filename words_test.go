@@ -162,3 +162,35 @@ func TestRandomWord(t *testing.T) {
 		t.Error("expected a result of length 6")
 	}
 }
+
+func TestRandomWords(t *testing.T) {
+	t.Parallel()
+	testAPIKey, err := getEnvKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cl := NewClient(testAPIKey)
+
+	// Expect no result
+	res, err := cl.RandomWords(MinCorpusCount(2), MaxCorpusCount(1))
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	if len(res.words) != 0 {
+		t.Error("Expected no result")
+	}
+
+	// Expect several words of appropriate length
+	res, err = cl.RandomWords(MinLength(5), MaxLength(5), Limit(5))
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	for _, resWord := range res.words {
+		if len(resWord.Word) != 5 {
+			t.Error("expected a result of length 5")
+		}
+	}
+}
