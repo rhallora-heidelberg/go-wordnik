@@ -92,6 +92,8 @@ var RevDictTestCases = []struct {
 	expectedWord string
 }{
 	{"having the bad qualities of a dog", []QueryOption{}, true, "doggish"},
+	{"badly", []QueryOption{FindSenseForWord("incond"), IncludeSourceDictionaries([]string{"ahd"}), ExcludeSourceDictionaries([]string{"webster"}), ExpandTerms("bad input"), IncludeTags(false), SortBy("alpha")}, true, "incondite"},
+	{"the quality of not having a result due to excessive specificity", []QueryOption{IncludeSourceDictionaries([]string{"webster"}), FindSenseForWord("excesspecifidocious")}, false, ""},
 }
 
 func TestRevDict(t *testing.T) {
