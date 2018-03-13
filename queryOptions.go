@@ -36,11 +36,47 @@ var (
 		"verb-intransitive":     true,
 		"verb-transitive":       true,
 	}
+
+	validSourceDictionaries = map[string]bool{
+		"ahd":        true,
+		"century":    true,
+		"wiktionary": true,
+		"webster":    true,
+		"wordnet":    true,
+	}
+
+	validSortCriteria = map[string]bool{
+		"alpha":  true,
+		"count":  true,
+		"length": true,
+	}
+
+	validExpandTerms = map[string]bool{
+		"synonym":  true,
+		"hypernym": true,
+	}
+
+	validSortOrder = map[string]bool{
+		"asc":  true,
+		"desc": true,
+	}
 )
 
 // QueryOption functions return functions which modify optional query parameters
 // by acting on url.Values pointers.
 type QueryOption func(*url.Values)
+
+func buildCommaSepQuery(items []string, validityMap map[string]bool) string {
+	var builder strings.Builder
+
+	for _, item := range items {
+		if validityMap[item] {
+			builder.WriteString(item)
+			builder.WriteString(",")
+		}
+	}
+	return builder.String()
+}
 
 // CaseSensitive sets the caseSensitive parameter based on boolean input.
 func CaseSensitive(b bool) QueryOption {
@@ -53,15 +89,8 @@ func CaseSensitive(b bool) QueryOption {
 // slice input.
 func IncludePartOfSpeech(parts []string) QueryOption {
 	return func(q *url.Values) {
-		var builder strings.Builder
-
-		for _, part := range parts {
-			if validPartOfSpeech[part] {
-				builder.WriteString(part)
-				builder.WriteString(",")
-			}
-		}
-		q.Set("includePartOfSpeech", builder.String())
+		value := buildCommaSepQuery(parts, validPartOfSpeech)
+		q.Set("includePartOfSpeech", value)
 	}
 }
 
@@ -69,15 +98,8 @@ func IncludePartOfSpeech(parts []string) QueryOption {
 // slice input.
 func ExcludePartOfSpeech(parts []string) QueryOption {
 	return func(q *url.Values) {
-		var builder strings.Builder
-
-		for _, part := range parts {
-			if validPartOfSpeech[part] {
-				builder.WriteString(part)
-				builder.WriteString(",")
-			}
-		}
-		q.Set("excludePartOfSpeech", builder.String())
+		value := buildCommaSepQuery(parts, validPartOfSpeech)
+		q.Set("excludePartOfSpeech", value)
 	}
 }
 
@@ -134,5 +156,63 @@ func Skip(n int64) QueryOption {
 func Limit(n int64) QueryOption {
 	return func(q *url.Values) {
 		q.Set("limit", strconv.FormatInt(n, 10))
+	}
+}
+
+// FindSenseForWord sets the findSenseForWord parameter based on string input.
+func FindSenseForWord(sense string) QueryOption {
+	return func(q *url.Values) {
+		q.Set("findSenseForWord", sense)
+	}
+}
+
+// IncludeSourceDictionaries sets the includeSourceDictionaries parameter based on string slice input.
+func IncludeSourceDictionaries(dicts []string) QueryOption {
+	return func(q *url.Values) {
+		value := buildCommaSepQuery(dicts, validSourceDictionaries)
+		q.Set("includeSourceDictionaries", value)
+	}
+}
+
+// ExcludeSourceDictionaries sets the excludeSourceDictionaries parameter based on string slice input.
+func ExcludeSourceDictionaries(dicts []string) QueryOption {
+	return func(q *url.Values) {
+		value := buildCommaSepQuery(dicts, validSourceDictionaries)
+		q.Set("excludeSourceDictionaries", value)
+	}
+}
+
+// ExpandTerms sets the expandTerms parameter based on string input.
+func ExpandTerms(term string) QueryOption {
+	return func(q *url.Values) {
+		if validExpandTerms[term] {
+			q.Set("expandTerms", term)
+		}
+	}
+}
+
+// IncludeTags sets the includeTags parameter based on boolean input.
+// Controls whether a closed set of XML tags should be returned in response.
+func IncludeTags(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("includeTags", strconv.FormatBool(b))
+	}
+}
+
+// SortBy sets the sortBy parameter based on string input.
+func SortBy(sortCriteria string) QueryOption {
+	return func(q *url.Values) {
+		if validSortCriteria[sortCriteria] {
+			q.Set("sortBy", sortCriteria)
+		}
+	}
+}
+
+// SortOrder sets the sortOrder parameter based on string input.
+func SortOrder(direction string) QueryOption {
+	return func(q *url.Values) {
+		if validSortOrder[direction] {
+			q.Set("sortOrder", direction)
+		}
 	}
 }

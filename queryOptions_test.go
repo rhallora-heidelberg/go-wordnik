@@ -20,10 +20,14 @@ type int64QueryTest struct {
 	expected string
 }
 
+type stringQueryTest struct {
+	s, expected string
+}
+
 func queryTestBools(t *testing.T, testCases []boolQueryTest, f func(bool) QueryOption) {
 	for _, testCase := range testCases {
 		q := url.Values{}
-		CaseSensitive(testCase.b)(&q)
+		f(testCase.b)(&q)
 		if q.Encode() != testCase.expected {
 			t.Errorf("For %v got %q, expected: %q", testCase.b, q.Encode(), testCase.expected)
 		}
@@ -46,6 +50,16 @@ func queryTestInt64s(t *testing.T, testCases []int64QueryTest, f func(int64) Que
 		f(testCase.n)(&q)
 		if q.Encode() != testCase.expected {
 			t.Errorf("For %v got %q, expected: %q", testCase.n, q.Encode(), testCase.expected)
+		}
+	}
+}
+
+func queryTestStrings(t *testing.T, testCases []stringQueryTest, f func(string) QueryOption) {
+	for _, testCase := range testCases {
+		q := url.Values{}
+		f(testCase.s)(&q)
+		if q.Encode() != testCase.expected {
+			t.Errorf("For %v got %q, expected: %q", testCase.s, q.Encode(), testCase.expected)
 		}
 	}
 }
@@ -171,4 +185,79 @@ var limitTests = []int64QueryTest{
 
 func TestLimit(t *testing.T) {
 	queryTestInt64s(t, limitTests, Limit)
+}
+
+var findSenseTests = []stringQueryTest{
+	{"a", "findSenseForWord=a"},
+	{"b", "findSenseForWord=b"},
+	{"a b", "findSenseForWord=a+b"},
+}
+
+func TestFindSenseForWord(t *testing.T) {
+	queryTestStrings(t, findSenseTests, FindSenseForWord)
+}
+
+var includeSourceDictTests = []stringSliceQueryTest{
+	{[]string{""}, "includeSourceDictionaries="},
+	{[]string{"bird", "orange"}, "includeSourceDictionaries="},
+	{[]string{"ahd"}, "includeSourceDictionaries=ahd%2C"},
+	{[]string{"ahd", "wiktionary"}, "includeSourceDictionaries=ahd%2Cwiktionary%2C"},
+}
+
+func TestIncludeDictionaries(t *testing.T) {
+	queryTestStringSlices(t, includeSourceDictTests, IncludeSourceDictionaries)
+}
+
+var excludeSourceDictTests = []stringSliceQueryTest{
+	{[]string{""}, "excludeSourceDictionaries="},
+	{[]string{"bird", "orange"}, "excludeSourceDictionaries="},
+	{[]string{"ahd"}, "excludeSourceDictionaries=ahd%2C"},
+	{[]string{"ahd", "wiktionary"}, "excludeSourceDictionaries=ahd%2Cwiktionary%2C"},
+}
+
+func TestExcludeDictionaries(t *testing.T) {
+	queryTestStringSlices(t, excludeSourceDictTests, ExcludeSourceDictionaries)
+}
+
+var expandTermsTests = []stringQueryTest{
+	{"", ""},
+	{"f", ""},
+	{"hypernym", "expandTerms=hypernym"},
+	{"synonym", "expandTerms=synonym"},
+}
+
+func TestExpandTerms(t *testing.T) {
+	queryTestStrings(t, expandTermsTests, ExpandTerms)
+}
+
+var includeTagsTests = []boolQueryTest{
+	{true, "includeTags=true"},
+	{false, "includeTags=false"},
+}
+
+func TestIncludeTags(t *testing.T) {
+	queryTestBools(t, includeTagsTests, IncludeTags)
+}
+
+var sortByTests = []stringQueryTest{
+	{"", ""},
+	{"x", ""},
+	{"alpha", "sortBy=alpha"},
+	{"count", "sortBy=count"},
+	{"length", "sortBy=length"},
+}
+
+func TestSortBy(t *testing.T) {
+	queryTestStrings(t, sortByTests, SortBy)
+}
+
+var sortOrderTests = []stringQueryTest{
+	{"", ""},
+	{"up", ""},
+	{"asc", "sortOrder=asc"},
+	{"desc", "sortOrder=desc"},
+}
+
+func TestSortOrder(t *testing.T) {
+	queryTestStrings(t, sortOrderTests, SortOrder)
 }
