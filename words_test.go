@@ -30,6 +30,7 @@ var wotdTests = []struct {
 }
 
 func TestGetWordOfTheDay(t *testing.T) {
+	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
 		t.Fatal(err)
@@ -56,6 +57,7 @@ var SearchTestCases = []struct {
 }
 
 func TestSearch(t *testing.T) {
+	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
 		t.Fatal(err)
@@ -97,6 +99,7 @@ var RevDictTestCases = []struct {
 }
 
 func TestRevDict(t *testing.T) {
+	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
 		t.Fatal(err)
@@ -130,6 +133,7 @@ func TestRevDict(t *testing.T) {
 }
 
 func TestRandomWord(t *testing.T) {
+	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
 		t.Fatal(err)
