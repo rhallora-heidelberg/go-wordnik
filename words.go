@@ -64,22 +64,22 @@ type DefinitionSearchResults struct {
 
 // Definition as defined by the Wordnik API.
 type Definition struct {
-	ExtendedText     string        `json:"extendedText"`
-	Text             string        `json:"text"`
-	SourceDictionary string        `json:"sourceDictionary"`
-	Citations        []Citation    `json:"citations"`
-	Labels           []Label       `json:"labels"`
-	Score            float64       `json:"score"` //'NaN' will be zero-valued
-	ExampleUses      []ExampleUse  `json:"exampleUses"`
-	AttributionURL   string        `json:"attributionUrl"`
-	SeqString        string        `json:"seqString"`
-	AttributionText  string        `json:"attributionText"`
-	RelatedWords     []RelatedWord `json:"relatedWords"`
-	Sequence         string        `json:"sequence"`
-	Word             string        `json:"word"`
-	Notes            []Note        `json:"notes"`
-	TextProns        []TextPron    `json:"textProns"`
-	PartOfSpeech     string        `json:"partOfSpeech"`
+	ExtendedText     string         `json:"extendedText"`
+	Text             string         `json:"text"`
+	SourceDictionary string         `json:"sourceDictionary"`
+	Citations        []Citation     `json:"citations"`
+	Labels           []Label        `json:"labels"`
+	Score            float64        `json:"score"` //'NaN' will be zero-valued
+	ExampleUses      []ExampleUsage `json:"exampleUses"`
+	AttributionURL   string         `json:"attributionUrl"`
+	SeqString        string         `json:"seqString"`
+	AttributionText  string         `json:"attributionText"`
+	RelatedWords     []RelatedWord  `json:"relatedWords"`
+	Sequence         string         `json:"sequence"`
+	Word             string         `json:"word"`
+	Notes            []Note         `json:"notes"`
+	TextProns        []TextPron     `json:"textProns"`
+	PartOfSpeech     string         `json:"partOfSpeech"`
 }
 
 // Citation as defined by the Wordnik API.
@@ -94,8 +94,8 @@ type Label struct {
 	Type string `json:"type"`
 }
 
-// ExampleUse as defined by the Wordnik API.
-type ExampleUse struct {
+// ExampleUsage as defined by the Wordnik API.
+type ExampleUsage struct {
 	Text string `json:"text"`
 }
 
