@@ -176,22 +176,10 @@ func (c *Client) Search(query string, queryOptions ...QueryOption) (WordSearchRe
 		"limit":              []string{"10"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return WordSearchResults{}, err
-	}
-
 	var results WordSearchResults
-	err = c.doRequest(req, &results)
-	if err != nil {
-		return WordSearchResults{}, err
-	}
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
-	return results, nil
+	return results, err
 }
 
 // ReverseDictionary returns the result of a reverse dictionary search. Returns
@@ -258,17 +246,8 @@ func (c *Client) RandomWords(queryOptions ...QueryOption) (WordObjects, error) {
 		"limit":              []string{"10"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return WordObjects{}, err
-	}
-
 	var results WordObjects
-	err = c.doRequest(req, &results)
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
 }
@@ -291,17 +270,8 @@ func (c *Client) RandomWord(queryOptions ...QueryOption) (WordObject, error) {
 		"maxLength":          []string{"-1"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return WordObject{}, err
-	}
-
 	var results WordObject
-	err = c.doRequest(req, &results)
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
 }

@@ -163,17 +163,8 @@ func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSear
 		"limit":             []string{"5"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return ExampleSearchResults{}, err
-	}
-
 	var results ExampleSearchResults
-	err = c.doRequest(req, &results)
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
 }
@@ -191,17 +182,8 @@ func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, err
 		"includeSuggestions": []string{"true"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return WordObject{}, err
-	}
-
 	var results WordObject
-	err = c.doRequest(req, &results)
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
 }
@@ -221,17 +203,8 @@ func (c *Client) Definitions(word string, queryOptions ...QueryOption) ([]Defini
 		"includeTags":    []string{"false"},
 	}
 
-	for _, option := range queryOptions {
-		option(&q)
-	}
-
-	req, err := c.formRequest(rel, q, "GET")
-	if err != nil {
-		return []Definition{}, err
-	}
-
 	var results []Definition
-	err = c.doRequest(req, &results)
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
 }

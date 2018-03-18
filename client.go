@@ -51,3 +51,20 @@ func (c *Client) doRequest(req *http.Request, dst interface{}) error {
 	defer res.Body.Close()
 	return json.NewDecoder(res.Body).Decode(dst)
 }
+
+// basicGetRequest is a helper method which makes most of the GET requests
+// endpoints simpler.
+func (c *Client) basicGetRequest(rel *url.URL, vals url.Values, dst interface{}, options ...QueryOption) error {
+	for _, option := range options {
+		option(&vals)
+	}
+
+	req, err := c.formRequest(rel, vals, "GET")
+	if err != nil {
+		return err
+	}
+
+	err = c.doRequest(req, dst)
+
+	return err
+}
