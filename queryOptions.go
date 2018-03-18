@@ -38,6 +38,7 @@ var (
 	}
 
 	validSourceDictionaries = map[string]bool{
+		"all":        true,
 		"ahd":        true,
 		"century":    true,
 		"wiktionary": true,
@@ -217,9 +218,62 @@ func SortOrder(direction string) QueryOption {
 	}
 }
 
-// HasDictionaryDef sets the hasDictionaryDef parameter based on string input.
+// HasDictionaryDef sets the hasDictionaryDef parameter based on boolean input.
 func HasDictionaryDef(b bool) QueryOption {
 	return func(q *url.Values) {
 		q.Set("hasDictionaryDef", strconv.FormatBool(b))
+	}
+}
+
+// UseCanonical sets the useCanonical parameter based on boolean input.
+func UseCanonical(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("useCanonical", strconv.FormatBool(b))
+	}
+}
+
+// IncludeSuggestions sets the includeSuggestions parameter based on boolean input.
+func IncludeSuggestions(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("includeSuggestions", strconv.FormatBool(b))
+	}
+}
+
+// IncludeDuplicates sets the includeDuplicates parameter based on boolean input.
+func IncludeDuplicates(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("includeDuplicates", strconv.FormatBool(b))
+	}
+}
+
+// IncludeRelated sets the includeRelated parameter based on boolean input.
+func IncludeRelated(b bool) QueryOption {
+	return func(q *url.Values) {
+		q.Set("includeRelated", strconv.FormatBool(b))
+	}
+}
+
+// PartOfSpeech sets the partOfSpeech parameter based on string
+// slice input.
+func PartOfSpeech(parts []string) QueryOption {
+	return func(q *url.Values) {
+		value := buildCommaSepQuery(parts, validPartOfSpeech)
+		q.Set("partOfSpeech", value)
+	}
+}
+
+// SourceDictionaries sets the sourceDictionaries parameter based on string slice
+// input. Differs notably in effect from "includeSourceDictionaries" when used
+// in the context of Definitions. According to the API:  Source dictionary to
+// return definitions from. If 'all' is received, results are returned from all
+// sources. If multiple values are received (e.g. 'century,wiktionary'), results
+//  are returned from the first specified dictionary that has definitions. If
+// left blank, results are returned from the first dictionary that has
+// definitions. By default, dictionaries are searched in this order: ahd,
+// wiktionary, webster, century, wordnet
+func SourceDictionaries(dicts []string) QueryOption {
+	return func(q *url.Values) {
+		value := buildCommaSepQuery(dicts, validSourceDictionaries)
+		q.Set("sourceDictionaries", value)
 	}
 }

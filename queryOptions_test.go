@@ -270,3 +270,71 @@ var hasDictionaryDefTests = []boolQueryTest{
 func TestHasDictionaryDef(t *testing.T) {
 	queryTestBools(t, hasDictionaryDefTests, HasDictionaryDef)
 }
+
+var useCanonicalTests = []boolQueryTest{
+	{true, "useCanonical=true"},
+	{false, "useCanonical=false"},
+}
+
+func TestUseCanonical(t *testing.T) {
+	queryTestBools(t, useCanonicalTests, UseCanonical)
+}
+
+var includeSuggestionsTests = []boolQueryTest{
+	{true, "includeSuggestions=true"},
+	{false, "includeSuggestions=false"},
+}
+
+func TestIncludeSuggestions(t *testing.T) {
+	queryTestBools(t, includeSuggestionsTests, IncludeSuggestions)
+}
+
+var includeDuplicatesTests = []boolQueryTest{
+	{true, "includeDuplicates=true"},
+	{false, "includeDuplicates=false"},
+}
+
+func TestIncludeDuplicates(t *testing.T) {
+	queryTestBools(t, includeDuplicatesTests, IncludeDuplicates)
+}
+
+var includeRelatedTests = []boolQueryTest{
+	{true, "includeRelated=true"},
+	{false, "includeRelated=false"},
+}
+
+func TestIncludeRelated(t *testing.T) {
+	queryTestBools(t, includeRelatedTests, IncludeRelated)
+}
+
+var partOfSpeechTests = []stringSliceQueryTest{
+	// Normal case
+	{[]string{"noun", "interjection"}, "partOfSpeech=noun%2Cinterjection%2C"},
+
+	// Some parts of speech invalid
+	{[]string{"orange", "noun", "noun,"}, "partOfSpeech=noun%2C"},
+
+	// All parts of speech invalid
+	{[]string{"", "orange", ","}, "partOfSpeech="},
+
+	// Empty input
+	{[]string{}, "partOfSpeech="},
+
+	// Repeated input (note: this is allowed by the API, but changes nothing)
+	{[]string{"noun", "noun"}, "partOfSpeech=noun%2Cnoun%2C"},
+}
+
+func TestPartOfSpeech(t *testing.T) {
+	queryTestStringSlices(t, partOfSpeechTests, PartOfSpeech)
+}
+
+var sourceDictTests = []stringSliceQueryTest{
+	{[]string{""}, "sourceDictionaries="},
+	{[]string{"bird", "orange"}, "sourceDictionaries="},
+	{[]string{"ahd"}, "sourceDictionaries=ahd%2C"},
+	{[]string{"ahd", "wiktionary"}, "sourceDictionaries=ahd%2Cwiktionary%2C"},
+}
+
+func TestSourceDictionaries(t *testing.T) {
+	queryTestStringSlices(t, sourceDictTests, SourceDictionaries)
+}

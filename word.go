@@ -1,5 +1,10 @@
 package wordnik
 
+import (
+	"errors"
+	"net/url"
+)
+
 // The WordObject as defined by the Wordnik API.
 type WordObject struct {
 	ID            int64    `json:"id"`
@@ -141,4 +146,92 @@ type AudioFile struct {
 	VoteWeightedAverage float64 `json:"voteWeightedAverage"`
 	VoteAverage         float64 `json:"voteAverage"`
 	Word                string  `json:"word"`
+}
+
+func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSearchResults, error) {
+	if word == "" {
+		return ExampleSearchResults{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/examples"}
+
+	// Default values
+	q := url.Values{
+		"includeDuplicates": []string{"false"},
+		"useCanonical":      []string{"false"},
+		"skip":              []string{"0"},
+		"limit":             []string{"5"},
+	}
+
+	for _, option := range queryOptions {
+		option(&q)
+	}
+
+	req, err := c.formRequest(rel, q, "GET")
+	if err != nil {
+		return ExampleSearchResults{}, err
+	}
+
+	var results ExampleSearchResults
+	err = c.doRequest(req, &results)
+
+	return results, err
+}
+
+func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, error) {
+	if word == "" {
+		return WordObject{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word}
+
+	// Default values
+	q := url.Values{
+		"useCanonical":       []string{"false"},
+		"includeSuggestions": []string{"true"},
+	}
+
+	for _, option := range queryOptions {
+		option(&q)
+	}
+
+	req, err := c.formRequest(rel, q, "GET")
+	if err != nil {
+		return WordObject{}, err
+	}
+
+	var results WordObject
+	err = c.doRequest(req, &results)
+
+	return results, err
+}
+
+func (c *Client) Definitions(word string, queryOptions ...QueryOption) ([]Definition, error) {
+	if word == "" {
+		return []Definition{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/definitions"}
+
+	// Default values
+	q := url.Values{
+		"limit":          []string{"200"},
+		"includeRelated": []string{"false"},
+		"useCanonical":   []string{"false"},
+		"includeTags":    []string{"false"},
+	}
+
+	for _, option := range queryOptions {
+		option(&q)
+	}
+
+	req, err := c.formRequest(rel, q, "GET")
+	if err != nil {
+		return []Definition{}, err
+	}
+
+	var results []Definition
+	err = c.doRequest(req, &results)
+
+	return results, err
 }
