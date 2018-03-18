@@ -128,7 +128,7 @@ type TextPron struct {
 // WordObjects is a container type for WordObject, for the purpose of
 // unmarshalling JSON.
 type WordObjects struct {
-	words []WordObject
+	Words []WordObject
 }
 
 // GetWordOfTheDay returns the word of the day for a given date string in the
