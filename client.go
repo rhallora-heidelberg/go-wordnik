@@ -2,6 +2,7 @@ package wordnik
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -29,10 +30,16 @@ func NewClient(key string) *Client {
 	return &Client{key, baseURL, &http.Client{Timeout: time.Second * 10}}
 }
 
-func (c *Client) formRequest(relativePath *url.URL, vals url.Values, method string) (*http.Request, error) {
+func (c *Client) formRequest(relativePath *url.URL, vals url.Values, method string, reader ...io.Reader) (*http.Request, error) {
 	u := c.baseURL.ResolveReference(relativePath)
 	u.RawQuery = vals.Encode()
-	request, err := http.NewRequest(method, u.String(), nil)
+
+	var body io.Reader
+	if len(reader) != 0 {
+		body = reader[0]
+	}
+
+	request, err := http.NewRequest(method, u.String(), body)
 	if err != nil {
 		return request, err
 	}
