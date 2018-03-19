@@ -338,3 +338,63 @@ var sourceDictTests = []stringSliceQueryTest{
 func TestSourceDictionaries(t *testing.T) {
 	queryTestStringSlices(t, sourceDictTests, SourceDictionaries)
 }
+
+var relTypesTests = []stringSliceQueryTest{
+	{[]string{""}, "relationshipTypes="},
+	{[]string{"bird", "orange"}, "relationshipTypes="},
+	{[]string{"synonym"}, "relationshipTypes=synonym%2C"},
+	{[]string{"synonym", "variant"}, "relationshipTypes=synonym%2Cvariant%2C"},
+}
+
+func TestRelTypes(t *testing.T) {
+	queryTestStringSlices(t, relTypesTests, RelationshipTypes)
+}
+
+var limitrelationshipTests = []int64QueryTest{
+	{-10, "limitRelationshipType=-10"},
+	{100, "limitRelationshipType=100"},
+}
+
+func TestLimitRelationshipType(t *testing.T) {
+	queryTestInt64s(t, limitrelationshipTests, LimitRelationshipType)
+}
+
+var typeFormatTests = []stringQueryTest{
+	{"", ""},
+	{"f", ""},
+	{"ahd", "typeFormat=ahd"},
+	{"IPA", "typeFormat=IPA"},
+}
+
+func TestTypeFormat(t *testing.T) {
+	queryTestStrings(t, typeFormatTests, TypeFormat)
+}
+
+var sourceDictionaryTests = []stringQueryTest{
+	{"", ""},
+	{"f", ""},
+	{"ahd", "sourceDictionary=ahd"},
+	{"century", "sourceDictionary=century"},
+}
+
+func TestSourceDictionary(t *testing.T) {
+	queryTestStrings(t, sourceDictionaryTests, SourceDictionary)
+}
+
+var startYearTests = []int64QueryTest{
+	{-10, "startYear=-10"},
+	{100, "startYear=100"},
+}
+
+func TestStartYear(t *testing.T) {
+	queryTestInt64s(t, startYearTests, StartYear)
+}
+
+var endYearTests = []int64QueryTest{
+	{-10, "endYear=-10"},
+	{100, "endYear=100"},
+}
+
+func TestEndYear(t *testing.T) {
+	queryTestInt64s(t, endYearTests, EndYear)
+}

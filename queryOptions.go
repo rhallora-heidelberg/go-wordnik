@@ -61,6 +61,32 @@ var (
 		"asc":  true,
 		"desc": true,
 	}
+
+	validRelationshipTypes = map[string]bool{
+		"synonym":         true,
+		"antonym":         true,
+		"variant":         true,
+		"equivalent":      true,
+		"cross-reference": true,
+		"related-word":    true,
+		"rhyme":           true,
+		"form":            true,
+		"etymologically-related-term": true,
+		"hypernym":                    true,
+		"hyponym":                     true,
+		"inflected-form":              true,
+		"primary":                     true,
+		"same-context":                true,
+		"verb-form":                   true,
+		"verb-stem":                   true,
+	}
+
+	validTypeFormat = map[string]bool{
+		"ahd":               true,
+		"arpabet":           true,
+		"gcide-diacritical": true,
+		"IPA":               true,
+	}
 )
 
 // QueryOption functions return functions which modify optional query parameters
@@ -275,5 +301,58 @@ func SourceDictionaries(dicts []string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(dicts, validSourceDictionaries)
 		q.Set("sourceDictionaries", value)
+	}
+}
+
+// RelationshipTypes sets the relationshipTypes parameter based on string slice
+// input. This parameter works in conjunction with limitRelationshipType,
+// in that this list of relationship types is allowed but each type is limited
+// in how many examples it returns by limitRelationshipType.
+func RelationshipTypes(types []string) QueryOption {
+	return func(q *url.Values) {
+		value := buildCommaSepQuery(types, validRelationshipTypes)
+		q.Set("relationshipTypes", value)
+	}
+}
+
+// LimitRelationshipType sets the limitRelationshipType parameter based on
+// integer input. This parameter works in conjunction with relationshipTypes,
+// in that the list of relationship types is allowed but each type is limited
+// in how many examples it returns by limitRelationshipType.
+func LimitRelationshipType(n int64) QueryOption {
+	return func(q *url.Values) {
+		q.Set("limitRelationshipType", strconv.FormatInt(n, 10))
+	}
+}
+
+// TypeFormat sets the typeFormat parameter based on string input.
+func TypeFormat(format string) QueryOption {
+	return func(q *url.Values) {
+		if validTypeFormat[format] {
+			q.Set("typeFormat", format)
+		}
+	}
+}
+
+// SourceDictionary sets the sourceDictionary parameter based on string input.
+func SourceDictionary(format string) QueryOption {
+	return func(q *url.Values) {
+		if validSourceDictionaries[format] {
+			q.Set("sourceDictionary", format)
+		}
+	}
+}
+
+// StartYear sets the startYear parameter based on integer input.
+func StartYear(n int64) QueryOption {
+	return func(q *url.Values) {
+		q.Set("startYear", strconv.FormatInt(n, 10))
+	}
+}
+
+// EndYear sets the endYear parameter based on integer input.
+func EndYear(n int64) QueryOption {
+	return func(q *url.Values) {
+		q.Set("endYear", strconv.FormatInt(n, 10))
 	}
 }

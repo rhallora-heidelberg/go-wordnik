@@ -74,12 +74,6 @@ type ScoredWord struct {
 	PartOfSpeech  string `json:"partOfSpeech"`
 }
 
-// Syllables is a container type for Syllable, for the purpose of
-// unmarshalling JSON.
-type Syllables struct {
-	Syllables []Syllable
-}
-
 // Syllable as defined by the Wordnik API.
 type Syllable struct {
 	Text string `json:"text"`
@@ -102,12 +96,6 @@ type Frequency struct {
 	Year  int64 `json:"year"`
 }
 
-// Bigrams is a container type for Bigram, for the purpose of
-// unmarshalling JSON.
-type Bigrams struct {
-	Bigrams []Bigram
-}
-
 // Bigram as defined by the Wordnik API.
 type Bigram struct {
 	Count int64   `json:"count"`
@@ -120,12 +108,6 @@ type Bigram struct {
 // EtymologiesResponse is provided for convenience, since results are returned
 // as a list of strings with xml formatting.
 type EtymologiesResponse []string
-
-// AudioFiles is a container type for AudioFile, for the purpose of
-// unmarshalling JSON.
-type AudioFiles struct {
-	AudioFiles []AudioFile
-}
 
 // AudioFile as defined by the Wordnik API. Note from the docs:
 // The metadata includes a time-expiring fileUrl which allows reading the audio
@@ -148,6 +130,9 @@ type AudioFile struct {
 	Word                string  `json:"word"`
 }
 
+// Examples returns examples for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
 func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSearchResults, error) {
 	if word == "" {
 		return ExampleSearchResults{}, errors.New("empty query string not allowed")
@@ -169,6 +154,9 @@ func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSear
 	return results, err
 }
 
+// Word returns a WordObject for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
 func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, error) {
 	if word == "" {
 		return WordObject{}, errors.New("empty query string not allowed")
@@ -188,6 +176,9 @@ func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, err
 	return results, err
 }
 
+// Definitions returns definitions for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
 func (c *Client) Definitions(word string, queryOptions ...QueryOption) ([]Definition, error) {
 	if word == "" {
 		return []Definition{}, errors.New("empty query string not allowed")
@@ -204,6 +195,176 @@ func (c *Client) Definitions(word string, queryOptions ...QueryOption) ([]Defini
 	}
 
 	var results []Definition
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// TopExample returns the top example for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) TopExample(word string, options ...QueryOption) (Example, error) {
+	if word == "" {
+		return Example{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/topExample"}
+
+	// Default values
+	q := url.Values{"useCanonical": []string{"false"}}
+
+	var results Example
+	err := c.basicGetRequest(rel, q, &results, options...)
+
+	return results, err
+}
+
+// RelatedWords returns related words for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) RelatedWords(word string, queryOptions ...QueryOption) ([]RelatedWord, error) {
+	if word == "" {
+		return []RelatedWord{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/relatedWords"}
+
+	// Default values
+	q := url.Values{
+		"useCanonical":           []string{"false"},
+		"limitRelationshipTypes": []string{"10"},
+	}
+
+	var results []RelatedWord
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Pronunciations returns pronunciations for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Pronunciations(word string, queryOptions ...QueryOption) ([]TextPron, error) {
+	if word == "" {
+		return []TextPron{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/pronunciations"}
+
+	// Default values
+	q := url.Values{
+		"limit":        []string{"50"},
+		"useCanonical": []string{"false"},
+	}
+
+	var results []TextPron
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Hyphenation returns hyphenated portions of a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Hyphenation(word string, queryOptions ...QueryOption) ([]Syllable, error) {
+	if word == "" {
+		return []Syllable{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/hyphenation"}
+
+	// Default values
+	q := url.Values{
+		"limit":        []string{"50"},
+		"useCanonical": []string{"false"},
+	}
+
+	var results []Syllable
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Frequency returns a frequency summary for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Frequency(word string, queryOptions ...QueryOption) (FrequencySummary, error) {
+	if word == "" {
+		return FrequencySummary{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/frequency"}
+
+	// Default values
+	q := url.Values{
+		"useCanonical": []string{"false"},
+	}
+
+	var results FrequencySummary
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Phrases returns two-word phrases for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Phrases(word string, queryOptions ...QueryOption) ([]Bigram, error) {
+	if word == "" {
+		return []Bigram{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/phrases"}
+
+	// Default values
+	q := url.Values{
+		"limit":        []string{"5"},
+		"wlmi":         []string{"0"},
+		"useCanonical": []string{"false"},
+	}
+
+	var results []Bigram
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Etymologies returns etymologies for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Etymologies(word string, queryOptions ...QueryOption) (EtymologiesResponse, error) {
+	if word == "" {
+		return EtymologiesResponse{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/etymologies"}
+
+	// Default values
+	q := url.Values{"useCanonical": []string{"false"}}
+
+	var results EtymologiesResponse
+	err := c.basicGetRequest(rel, q, &results, queryOptions...)
+
+	return results, err
+}
+
+// Audio returns a link to pronunciations for a given word, with optional constraints.
+// Configured with QueryOption functions, which ensure basic parameter
+// vailidity.
+func (c *Client) Audio(word string, queryOptions ...QueryOption) ([]AudioFile, error) {
+	if word == "" {
+		return []AudioFile{}, errors.New("empty query string not allowed")
+	}
+
+	rel := &url.URL{Path: "word.json/" + word + "/audio"}
+
+	// Default values
+	q := url.Values{
+		"limit":        []string{"50"},
+		"useCanonical": []string{"false"},
+	}
+
+	var results []AudioFile
 	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
