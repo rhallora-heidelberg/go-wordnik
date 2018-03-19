@@ -64,9 +64,9 @@ If you need to set the same parameters on a regular basis, you can define your o
 ```
 
 ## Running The Tests
-In order to run the included tests, you'll need to provide an API key via the [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html) WORDNIK_API_KEY. There are a number of ways to do this, but here's a simple one-off for the command line:
+In order to run the included tests, you'll need to provide some information via three [environment variables](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html): WORDNIK_API_KEY, WORDNIK_TEST_USER, and WORDNIK_TEST_PASS. There are a number of ways to do this, but here's a simple one-off example for the command line:
 ```sh
-WORDNIK_API_KEY="YOUR_KEY_HERE" go test
+WORDNIK_API_KEY="your_key" WORDNIK_TEST_USER="your_account" WORDNIK_TEST_PASS="your_password" go test
 ```
 
 ## License
