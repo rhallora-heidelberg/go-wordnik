@@ -1,9 +1,9 @@
 package wordnik
 
 import (
+	"bytes"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 var (
@@ -94,15 +94,15 @@ var (
 type QueryOption func(*url.Values)
 
 func buildCommaSepQuery(items []string, validityMap map[string]bool) string {
-	var builder strings.Builder
+	var buffer bytes.Buffer
 
 	for _, item := range items {
 		if validityMap[item] {
-			builder.WriteString(item)
-			builder.WriteString(",")
+			buffer.WriteString(item)
+			buffer.WriteString(",")
 		}
 	}
-	return builder.String()
+	return buffer.String()
 }
 
 // CaseSensitive sets the caseSensitive parameter based on boolean input.
