@@ -56,6 +56,10 @@ func (c *Client) doRequest(req *http.Request, dst interface{}) error {
 	}
 
 	defer res.Body.Close()
+	if dst == nil {
+		return nil
+	}
+
 	return json.NewDecoder(res.Body).Decode(dst)
 }
 
