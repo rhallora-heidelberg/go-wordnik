@@ -73,7 +73,7 @@ func (c *Client) getTestAuth() (AuthenticationToken, error) {
 	return cl.AuthenticateGET(tUser.user, tUser.pass)
 }
 
-func TestAPITokenStatus(t *testing.T) {
+func TestGetAPITokenStatus(t *testing.T) {
 	t.Parallel()
 
 	testAPIKey, err := getEnvKey()
@@ -82,11 +82,68 @@ func TestAPITokenStatus(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	res, err := cl.APITokenStatus()
+	res, err := cl.GetAPITokenStatus()
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	} else if res.Token == "" {
 		t.Error("expected response with non-empty token")
 	}
 
+}
+
+func TestGetUser(t *testing.T) {
+	t.Parallel()
+
+	testAPIKey, err := getEnvKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cl := NewClient(testAPIKey)
+	auth, err := cl.getTestAuth()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = cl.GetUser("")
+	if err == nil {
+		t.Error("expected error for empty string input")
+	}
+
+	res, err := cl.GetUser(auth.Token)
+	if err != nil {
+		t.Error("unexpected error: " + err.Error())
+	} else if res.ID == 0 {
+		t.Error("expected response with non-zero ID")
+	}
+}
+
+// NOTE: expects that test account has at least one wordlist associated with it.
+// This is so that we can test for meaningful return values while minimizing
+// test interdependency.
+func TestGetWordListsForUser(t *testing.T) {
+	t.Parallel()
+
+	testAPIKey, err := getEnvKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cl := NewClient(testAPIKey)
+	auth, err := cl.getTestAuth()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = cl.GetWordListsForUser("")
+	if err == nil {
+		t.Error("expected error for empty string input")
+	}
+
+	res, err := cl.GetWordListsForUser(auth.Token)
+	if err != nil {
+		t.Error("unexpected error: " + err.Error())
+	} else if len(res) == 0 {
+		t.Error("expected at least one value in result")
+	}
 }
