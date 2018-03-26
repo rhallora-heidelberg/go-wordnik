@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestExamples(t *testing.T) {
+func TestGetExamples(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -12,12 +12,12 @@ func TestExamples(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Examples("")
+	_, err = cl.GetExamples("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Examples("recalcitrant", Limit(20))
+	res, err := cl.GetExamples("recalcitrant", Limit(20))
 	if err != nil {
 		t.Error("unexpected error:" + err.Error())
 	}
@@ -34,7 +34,7 @@ func TestExamples(t *testing.T) {
 	}
 }
 
-func TestWord(t *testing.T) {
+func TestGetWord(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -42,12 +42,12 @@ func TestWord(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Word("")
+	_, err = cl.GetWord("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Word("thought")
+	res, err := cl.GetWord("thought")
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	}
@@ -56,7 +56,7 @@ func TestWord(t *testing.T) {
 		t.Error("expected query for 'thought' to return wordObject")
 	}
 
-	res, err = cl.Word("cats", UseCanonical(true))
+	res, err = cl.GetWord("cats", UseCanonical(true))
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	}
@@ -66,7 +66,7 @@ func TestWord(t *testing.T) {
 	}
 }
 
-func TestDefinitions(t *testing.T) {
+func TestGetDefinitions(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -74,12 +74,12 @@ func TestDefinitions(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Definitions("")
+	_, err = cl.GetDefinitions("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Definitions("potato")
+	res, err := cl.GetDefinitions("potato")
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	}
@@ -88,7 +88,7 @@ func TestDefinitions(t *testing.T) {
 		t.Error("expected at least one result")
 	}
 
-	res, err = cl.Definitions("potato", SourceDictionaries([]string{"all"}))
+	res, err = cl.GetDefinitions("potato", SourceDictionaries([]string{"all"}))
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	}
@@ -129,12 +129,12 @@ func TestRelationshipTypes(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.RelatedWords("")
+	_, err = cl.GetRelatedWords("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.RelatedWords("mad", RelationshipTypes([]string{"synonym", "variant"}), LimitRelationshipType(1))
+	res, err := cl.GetRelatedWords("mad", RelationshipTypes([]string{"synonym", "variant"}), LimitRelationshipType(1))
 	if err != nil {
 		t.Error("unexpected error")
 	}
@@ -190,7 +190,7 @@ func TestHyphenation(t *testing.T) {
 	}
 }
 
-func TestFrequency(t *testing.T) {
+func TestGetWordFrequency(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -198,12 +198,12 @@ func TestFrequency(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Frequency("")
+	_, err = cl.GetWordFrequency("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Frequency("orange", StartYear(2000), EndYear(2009))
+	res, err := cl.GetWordFrequency("orange", StartYear(2000), EndYear(2009))
 	if err != nil {
 		t.Error("unexpected error")
 	}
@@ -213,7 +213,7 @@ func TestFrequency(t *testing.T) {
 	}
 }
 
-func TestPhrases(t *testing.T) {
+func TestGetPhrases(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -221,12 +221,12 @@ func TestPhrases(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Phrases("")
+	_, err = cl.GetPhrases("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Phrases("orange")
+	res, err := cl.GetPhrases("orange")
 	if err != nil {
 		t.Error("unexpected error")
 	}
@@ -236,7 +236,7 @@ func TestPhrases(t *testing.T) {
 	}
 }
 
-func TestEtymologies(t *testing.T) {
+func TestGetEtymologies(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -244,12 +244,12 @@ func TestEtymologies(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Etymologies("")
+	_, err = cl.GetEtymologies("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Etymologies("orange")
+	res, err := cl.GetEtymologies("orange")
 	if err != nil {
 		t.Error("unexpected error")
 	}
@@ -259,7 +259,7 @@ func TestEtymologies(t *testing.T) {
 	}
 }
 
-func TestAudio(t *testing.T) {
+func TestGetAudio(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -267,12 +267,12 @@ func TestAudio(t *testing.T) {
 	}
 
 	cl := NewClient(testAPIKey)
-	_, err = cl.Audio("")
+	_, err = cl.GetAudio("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.Audio("likely")
+	res, err := cl.GetAudio("likely")
 	if err != nil {
 		t.Error("unexpected error")
 	}

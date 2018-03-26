@@ -47,7 +47,7 @@ func TestGetWordOfTheDay(t *testing.T) {
 	}
 }
 
-var SearchTestCases = []struct {
+var SearchWordsTestCases = []struct {
 	query        string
 	options      []QueryOption
 	expectResult bool
@@ -56,7 +56,7 @@ var SearchTestCases = []struct {
 	{"dem", []QueryOption{CaseSensitive(true), IncludePartOfSpeech([]string{"noun"}), ExcludePartOfSpeech([]string{"adjective"}), MinCorpusCount(100), MaxCorpusCount(-1), MinDictionaryCount(1), MaxDictionaryCount(-1), MinLength(5), MaxLength(15), Skip(0), Limit(15)}, false},
 }
 
-func TestSearch(t *testing.T) {
+func TestSearchWords(t *testing.T) {
 	t.Parallel()
 	testAPIKey, err := getEnvKey()
 	if err != nil {
@@ -65,13 +65,13 @@ func TestSearch(t *testing.T) {
 
 	cl := NewClient(testAPIKey)
 
-	_, err = cl.Search("")
+	_, err = cl.SearchWords("")
 	if err == nil {
 		t.Error("Expected error for empty query")
 	}
 
-	for _, testCase := range SearchTestCases {
-		res, err := cl.Search(testCase.query, testCase.options...)
+	for _, testCase := range SearchWordsTestCases {
+		res, err := cl.SearchWords(testCase.query, testCase.options...)
 		if err != nil {
 			t.Error("Unexpected error")
 		}

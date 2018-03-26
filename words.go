@@ -153,10 +153,10 @@ func (c *Client) GetWordOfTheDay(dateString string) (WordOfTheDay, error) {
 	return wotd, nil
 }
 
-// Search returns the results of a word search. Returns an error for empty input,
+// SearchWords returns the results of a word search. Returns an error for empty input,
 // but other 'incorrect' parameters are left to the APIs discretion. Configured
 // with QueryOption functions, which ensure basic parameter vailidity.
-func (c *Client) Search(query string, queryOptions ...QueryOption) (WordSearchResults, error) {
+func (c *Client) SearchWords(query string, queryOptions ...QueryOption) (WordSearchResults, error) {
 	if query == "" {
 		return WordSearchResults{}, errors.New("empty query string not allowed")
 	}

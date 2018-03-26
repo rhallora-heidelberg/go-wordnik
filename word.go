@@ -130,10 +130,10 @@ type AudioFile struct {
 	Word                string  `json:"word"`
 }
 
-// Examples returns examples for a given word, with optional constraints.
+// GetExamples returns examples for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSearchResults, error) {
+func (c *Client) GetExamples(word string, queryOptions ...QueryOption) (ExampleSearchResults, error) {
 	if word == "" {
 		return ExampleSearchResults{}, errors.New("empty query string not allowed")
 	}
@@ -154,10 +154,10 @@ func (c *Client) Examples(word string, queryOptions ...QueryOption) (ExampleSear
 	return results, err
 }
 
-// Word returns a WordObject for a given word, with optional constraints.
+// GetWord returns a WordObject for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, error) {
+func (c *Client) GetWord(word string, queryOptions ...QueryOption) (WordObject, error) {
 	if word == "" {
 		return WordObject{}, errors.New("empty query string not allowed")
 	}
@@ -176,10 +176,10 @@ func (c *Client) Word(word string, queryOptions ...QueryOption) (WordObject, err
 	return results, err
 }
 
-// Definitions returns definitions for a given word, with optional constraints.
+// GetDefinitions returns definitions for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Definitions(word string, queryOptions ...QueryOption) ([]Definition, error) {
+func (c *Client) GetDefinitions(word string, queryOptions ...QueryOption) ([]Definition, error) {
 	if word == "" {
 		return []Definition{}, errors.New("empty query string not allowed")
 	}
@@ -219,10 +219,10 @@ func (c *Client) TopExample(word string, options ...QueryOption) (Example, error
 	return results, err
 }
 
-// RelatedWords returns related words for a given word, with optional constraints.
+// GetRelatedWords returns related words for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) RelatedWords(word string, queryOptions ...QueryOption) ([]RelatedWord, error) {
+func (c *Client) GetRelatedWords(word string, queryOptions ...QueryOption) ([]RelatedWord, error) {
 	if word == "" {
 		return []RelatedWord{}, errors.New("empty query string not allowed")
 	}
@@ -285,10 +285,10 @@ func (c *Client) Hyphenation(word string, queryOptions ...QueryOption) ([]Syllab
 	return results, err
 }
 
-// Frequency returns a frequency summary for a given word, with optional constraints.
+// GetWordFrequency returns a frequency summary for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Frequency(word string, queryOptions ...QueryOption) (FrequencySummary, error) {
+func (c *Client) GetWordFrequency(word string, queryOptions ...QueryOption) (FrequencySummary, error) {
 	if word == "" {
 		return FrequencySummary{}, errors.New("empty query string not allowed")
 	}
@@ -306,10 +306,10 @@ func (c *Client) Frequency(word string, queryOptions ...QueryOption) (FrequencyS
 	return results, err
 }
 
-// Phrases returns two-word phrases for a given word, with optional constraints.
+// GetPhrases returns two-word phrases for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Phrases(word string, queryOptions ...QueryOption) ([]Bigram, error) {
+func (c *Client) GetPhrases(word string, queryOptions ...QueryOption) ([]Bigram, error) {
 	if word == "" {
 		return []Bigram{}, errors.New("empty query string not allowed")
 	}
@@ -329,10 +329,10 @@ func (c *Client) Phrases(word string, queryOptions ...QueryOption) ([]Bigram, er
 	return results, err
 }
 
-// Etymologies returns etymologies for a given word, with optional constraints.
+// GetEtymologies returns etymologies for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Etymologies(word string, queryOptions ...QueryOption) (EtymologiesResponse, error) {
+func (c *Client) GetEtymologies(word string, queryOptions ...QueryOption) (EtymologiesResponse, error) {
 	if word == "" {
 		return EtymologiesResponse{}, errors.New("empty query string not allowed")
 	}
@@ -348,10 +348,10 @@ func (c *Client) Etymologies(word string, queryOptions ...QueryOption) (Etymolog
 	return results, err
 }
 
-// Audio returns a link to pronunciations for a given word, with optional constraints.
+// GetAudio returns a link to pronunciations for a given word, with optional constraints.
 // Configured with QueryOption functions, which ensure basic parameter
 // vailidity.
-func (c *Client) Audio(word string, queryOptions ...QueryOption) ([]AudioFile, error) {
+func (c *Client) GetAudio(word string, queryOptions ...QueryOption) ([]AudioFile, error) {
 	if word == "" {
 		return []AudioFile{}, errors.New("empty query string not allowed")
 	}
