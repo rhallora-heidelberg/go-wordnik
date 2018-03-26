@@ -6,6 +6,9 @@ Unofficial Go library for the [Wordnik](https://www.wordnik.com/) API
 [![Go Report Card](https://goreportcard.com/badge/github.com/rhallora-heidelberg/go-wordnik)](https://goreportcard.com/report/github.com/rhallora-heidelberg/go-wordnik)
 [![Documentation](https://godoc.org/github.com/rhallora-heidelberg/go-wordnik?status.svg)](http://godoc.org/github.com/rhallora-heidelberg/go-wordnik)
 
+## Requirements
+Go version >= 1.8
+
 ## Basic Usage
 ```golang
 package main
