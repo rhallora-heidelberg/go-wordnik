@@ -47,9 +47,10 @@ var (
 	}
 
 	validSortCriteria = map[string]bool{
-		"alpha":  true,
-		"count":  true,
-		"length": true,
+		"alpha":      true,
+		"count":      true,
+		"length":     true,
+		"createDate": true, //only applies to WordListWord queries
 	}
 
 	validExpandTerms = map[string]bool{
