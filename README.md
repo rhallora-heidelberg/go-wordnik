@@ -1,5 +1,4 @@
 # go-wordnik
-## (Under Construction)
 Unofficial Go library for the [Wordnik](https://www.wordnik.com/) API
 
 [![Build Status](https://travis-ci.org/rhallora-heidelberg/go-wordnik.svg?branch=master)](https://travis-ci.org/rhallora-heidelberg/go-wordnik)
