@@ -178,8 +178,8 @@ func TestRandomWords(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 
-	if len(res.Words) != 0 {
-		t.Error("Expected no result")
+	if len(res) != 0 {
+		t.Error("expected no result")
 	}
 
 	// Expect several words of appropriate length
@@ -188,7 +188,11 @@ func TestRandomWords(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 
-	for _, resWord := range res.Words {
+	if len(res) == 0 {
+		t.Error("expected at least one result")
+	}
+
+	for _, resWord := range res {
 		if len(resWord.Word) != 5 {
 			t.Error("expected a result of length 5")
 		}

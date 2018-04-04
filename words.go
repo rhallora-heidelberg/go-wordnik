@@ -125,12 +125,6 @@ type TextPron struct {
 	RawType string `json:"rawType"`
 }
 
-// WordObjects is a container type for WordObject, for the purpose of
-// unmarshalling JSON.
-type WordObjects struct {
-	Words []WordObject
-}
-
 // GetWordOfTheDay returns the word of the day for a given date string in the
 // format "yyyy-MM-dd".
 func (c *Client) GetWordOfTheDay(dateString string) (WordOfTheDay, error) {
@@ -227,12 +221,12 @@ func (c *Client) ReverseDictionary(query string, queryOptions ...QueryOption) (D
 	return results, err
 }
 
-// RandomWords returns random words as a WordObjects struct, with optional
+// RandomWords returns random words as a []WordObject, with optional
 // constraints. Configured with QueryOption functions, which ensure basic
 // parameter vailidity. See Wordnik docs for appropriate parameters:
 // http://developer.wordnik.com/docs.html#!/words/getRandomWords_get_3
-func (c *Client) RandomWords(queryOptions ...QueryOption) (WordObjects, error) {
-	rel := &url.URL{Path: "words.json/randomWord"}
+func (c *Client) RandomWords(queryOptions ...QueryOption) ([]WordObject, error) {
+	rel := &url.URL{Path: "words.json/randomWords"}
 
 	// Default values
 	q := url.Values{
@@ -246,7 +240,7 @@ func (c *Client) RandomWords(queryOptions ...QueryOption) (WordObjects, error) {
 		"limit":              []string{"10"},
 	}
 
-	var results WordObjects
+	var results []WordObject
 	err := c.basicGetRequest(rel, q, &results, queryOptions...)
 
 	return results, err
