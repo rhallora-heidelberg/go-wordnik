@@ -27,12 +27,6 @@ type stringValue struct {
 	Word string `json:"word,omitempty"`
 }
 
-// WordListWords is a container type for WordListWord, for the purpose of
-// unmarshalling JSON.
-type WordListWords struct {
-	WordListWords []WordListWord
-}
-
 // WordListWord as defined by the Wordnik API.
 type WordListWord struct {
 	ID                   int64  `json:"id"`
