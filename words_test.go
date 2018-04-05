@@ -48,7 +48,7 @@ var SearchWordsTestCases = []struct {
 	expectResult bool
 }{
 	{"dem", []QueryOption{}, true},
-	{"dem", []QueryOption{CaseSensitive(true), IncludePartOfSpeech([]string{"noun"}), ExcludePartOfSpeech([]string{"adjective"}), MinCorpusCount(100), MaxCorpusCount(-1), MinDictionaryCount(1), MaxDictionaryCount(-1), MinLength(5), MaxLength(15), Skip(0), Limit(15)}, false},
+	{"dem", []QueryOption{CaseSensitive(true), IncludePartOfSpeech("noun"), ExcludePartOfSpeech("adjective"), MinCorpusCount(100), MaxCorpusCount(-1), MinDictionaryCount(1), MaxDictionaryCount(-1), MinLength(5), MaxLength(15), Skip(0), Limit(15)}, false},
 }
 
 func TestSearchWords(t *testing.T) {
@@ -84,8 +84,8 @@ var RevDictTestCases = []struct {
 	expectedWord string
 }{
 	{"having the bad qualities of a dog", []QueryOption{}, true, "doggish"},
-	{"badly", []QueryOption{FindSenseForWord("incond"), IncludeSourceDictionaries([]string{"ahd"}), ExcludeSourceDictionaries([]string{"webster"}), ExpandTerms("bad input"), IncludeTags(false), SortBy("alpha")}, true, "incondite"},
-	{"the quality of not having a result due to excessive specificity", []QueryOption{IncludeSourceDictionaries([]string{"webster"}), FindSenseForWord("excesspecifidocious")}, false, ""},
+	{"badly", []QueryOption{FindSenseForWord("incond"), IncludeSourceDictionaries("ahd"), ExcludeSourceDictionaries("webster"), ExpandTerms("bad input"), IncludeTags(false), SortBy("alpha")}, true, "incondite"},
+	{"the quality of not having a result due to excessive specificity", []QueryOption{IncludeSourceDictionaries("webster"), FindSenseForWord("excesspecifidocious")}, false, ""},
 }
 
 func TestRevDict(t *testing.T) {

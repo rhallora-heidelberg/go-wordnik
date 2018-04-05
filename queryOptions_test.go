@@ -34,10 +34,10 @@ func queryTestBools(t *testing.T, testCases []boolQueryTest, f func(bool) QueryO
 	}
 }
 
-func queryTestStringSlices(t *testing.T, testCases []stringSliceQueryTest, f func([]string) QueryOption) {
+func queryTestStringSlices(t *testing.T, testCases []stringSliceQueryTest, f func(...string) QueryOption) {
 	for _, testCase := range testCases {
 		q := url.Values{}
-		f(testCase.strings)(&q)
+		f(testCase.strings...)(&q)
 		if q.Encode() != testCase.expected {
 			t.Errorf("For %v got %q, expected: %q", testCase.strings, q.Encode(), testCase.expected)
 		}

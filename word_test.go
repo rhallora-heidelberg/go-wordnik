@@ -73,7 +73,7 @@ func TestGetDefinitions(t *testing.T) {
 		t.Error("expected at least one result")
 	}
 
-	res, err = cl.GetDefinitions("potato", SourceDictionaries([]string{"all"}))
+	res, err = cl.GetDefinitions("potato", SourceDictionaries("all"))
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
 	}
@@ -109,7 +109,7 @@ func TestRelationshipTypes(t *testing.T) {
 		t.Error("expected error for empty string input")
 	}
 
-	res, err := cl.GetRelatedWords("mad", RelationshipTypes([]string{"synonym", "variant"}), LimitRelationshipType(1))
+	res, err := cl.GetRelatedWords("mad", RelationshipTypes("synonym", "variant"), LimitRelationshipType(1))
 	if err != nil {
 		t.Error("unexpected error")
 	}

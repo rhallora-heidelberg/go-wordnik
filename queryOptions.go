@@ -113,18 +113,18 @@ func CaseSensitive(b bool) QueryOption {
 	}
 }
 
-// IncludePartOfSpeech sets the includePartOfSpeech parameter based on string
-// slice input.
-func IncludePartOfSpeech(parts []string) QueryOption {
+// IncludePartOfSpeech sets the includePartOfSpeech parameter based on variadic
+// string input.
+func IncludePartOfSpeech(parts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(parts, validPartOfSpeech)
 		q.Set("includePartOfSpeech", value)
 	}
 }
 
-// ExcludePartOfSpeech sets the excludePartOfSpeech parameter based on string
-// slice input.
-func ExcludePartOfSpeech(parts []string) QueryOption {
+// ExcludePartOfSpeech sets the excludePartOfSpeech parameter based on variadic
+// string input.
+func ExcludePartOfSpeech(parts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(parts, validPartOfSpeech)
 		q.Set("excludePartOfSpeech", value)
@@ -194,16 +194,18 @@ func FindSenseForWord(sense string) QueryOption {
 	}
 }
 
-// IncludeSourceDictionaries sets the includeSourceDictionaries parameter based on string slice input.
-func IncludeSourceDictionaries(dicts []string) QueryOption {
+// IncludeSourceDictionaries sets the includeSourceDictionaries parameter based
+// on variadic string input.
+func IncludeSourceDictionaries(dicts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(dicts, validSourceDictionaries)
 		q.Set("includeSourceDictionaries", value)
 	}
 }
 
-// ExcludeSourceDictionaries sets the excludeSourceDictionaries parameter based on string slice input.
-func ExcludeSourceDictionaries(dicts []string) QueryOption {
+// ExcludeSourceDictionaries sets the excludeSourceDictionaries parameter based
+// variadic string input.
+func ExcludeSourceDictionaries(dicts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(dicts, validSourceDictionaries)
 		q.Set("excludeSourceDictionaries", value)
@@ -280,16 +282,15 @@ func IncludeRelated(b bool) QueryOption {
 	}
 }
 
-// PartOfSpeech sets the partOfSpeech parameter based on string
-// slice input.
-func PartOfSpeech(parts []string) QueryOption {
+// PartOfSpeech sets the partOfSpeech parameter based on variadic string input.
+func PartOfSpeech(parts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(parts, validPartOfSpeech)
 		q.Set("partOfSpeech", value)
 	}
 }
 
-// SourceDictionaries sets the sourceDictionaries parameter based on string slice
+// SourceDictionaries sets the sourceDictionaries parameter based on variadic string
 // input. Differs notably in effect from "includeSourceDictionaries" when used
 // in the context of Definitions. According to the API:  Source dictionary to
 // return definitions from. If 'all' is received, results are returned from all
@@ -298,18 +299,18 @@ func PartOfSpeech(parts []string) QueryOption {
 // left blank, results are returned from the first dictionary that has
 // definitions. By default, dictionaries are searched in this order: ahd,
 // wiktionary, webster, century, wordnet
-func SourceDictionaries(dicts []string) QueryOption {
+func SourceDictionaries(dicts ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(dicts, validSourceDictionaries)
 		q.Set("sourceDictionaries", value)
 	}
 }
 
-// RelationshipTypes sets the relationshipTypes parameter based on string slice
+// RelationshipTypes sets the relationshipTypes parameter based on variadic string
 // input. This parameter works in conjunction with limitRelationshipType,
 // in that this list of relationship types is allowed but each type is limited
 // in how many examples it returns by limitRelationshipType.
-func RelationshipTypes(types []string) QueryOption {
+func RelationshipTypes(types ...string) QueryOption {
 	return func(q *url.Values) {
 		value := buildCommaSepQuery(types, validRelationshipTypes)
 		q.Set("relationshipTypes", value)
