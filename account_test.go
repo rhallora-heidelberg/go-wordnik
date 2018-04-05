@@ -11,12 +11,7 @@ func TestAuthenticateGET(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 	_, err = cl.AuthenticateGET("", "")
 	if err == nil {
 		t.Error("expected error for empty string input")
@@ -37,12 +32,7 @@ func TestAuthenticatePOST(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 	_, err = cl.AuthenticatePOST("", "")
 	if err == nil {
 		t.Error("expected error for empty string input")
@@ -58,30 +48,20 @@ func TestAuthenticatePOST(t *testing.T) {
 
 // Helper function for testing which attempts to retrieve an AuthenticationToken
 // for username and password set by WORDNIK_TEST_USER and WORDNIK_TEST_PASS.
-func (c *Client) getTestAuth() (AuthenticationToken, error) {
+func (c *Client) getTestAuth(t *testing.T) (AuthenticationToken, error) {
 	tUser, err := getEnvUserPass()
 	if err != nil {
 		return AuthenticationToken{}, err
 	}
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		return AuthenticationToken{}, err
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 	return cl.AuthenticateGET(tUser.user, tUser.pass)
 }
 
 func TestGetAPITokenStatus(t *testing.T) {
 	t.Parallel()
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 	res, err := cl.GetAPITokenStatus()
 	if err != nil {
 		t.Error("unexpected error: " + err.Error())
@@ -94,13 +74,8 @@ func TestGetAPITokenStatus(t *testing.T) {
 func TestGetUser(t *testing.T) {
 	t.Parallel()
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	auth, err := cl.getTestAuth()
+	cl := getClient(t)
+	auth, err := cl.getTestAuth(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -124,13 +99,8 @@ func TestGetUser(t *testing.T) {
 func TestGetWordListsForUser(t *testing.T) {
 	t.Parallel()
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	auth, err := cl.getTestAuth()
+	cl := getClient(t)
+	auth, err := cl.getTestAuth(t)
 	if err != nil {
 		t.Fatal(err)
 	}

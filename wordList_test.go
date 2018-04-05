@@ -8,13 +8,8 @@ import (
 func TestWordListFuncs(t *testing.T) {
 	t.Parallel()
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	auth, err := cl.getTestAuth()
+	cl := getClient(t)
+	auth, err := cl.getTestAuth(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,13 +61,8 @@ func TestWordListFuncs(t *testing.T) {
 func TestWordListWordsFuncs(t *testing.T) {
 	t.Parallel()
 
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	auth, err := cl.getTestAuth()
+	cl := getClient(t)
+	auth, err := cl.getTestAuth(t)
 	if err != nil {
 		t.Fatal(err)
 	}

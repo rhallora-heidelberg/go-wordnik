@@ -6,13 +6,8 @@ import (
 
 func TestGetExamples(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetExamples("")
+	cl := getClient(t)
+	_, err := cl.GetExamples("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -36,13 +31,8 @@ func TestGetExamples(t *testing.T) {
 
 func TestGetWord(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetWord("")
+	cl := getClient(t)
+	_, err := cl.GetWord("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -68,13 +58,8 @@ func TestGetWord(t *testing.T) {
 
 func TestGetDefinitions(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetDefinitions("")
+	cl := getClient(t)
+	_, err := cl.GetDefinitions("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -100,13 +85,8 @@ func TestGetDefinitions(t *testing.T) {
 
 func TestTopExample(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.TopExample("")
+	cl := getClient(t)
+	_, err := cl.TopExample("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -123,13 +103,8 @@ func TestTopExample(t *testing.T) {
 
 func TestRelationshipTypes(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetRelatedWords("")
+	cl := getClient(t)
+	_, err := cl.GetRelatedWords("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -146,13 +121,8 @@ func TestRelationshipTypes(t *testing.T) {
 
 func TestPronunciations(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.Pronunciations("")
+	cl := getClient(t)
+	_, err := cl.Pronunciations("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -169,13 +139,8 @@ func TestPronunciations(t *testing.T) {
 
 func TestHyphenation(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.Hyphenation("")
+	cl := getClient(t)
+	_, err := cl.Hyphenation("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -192,13 +157,8 @@ func TestHyphenation(t *testing.T) {
 
 func TestGetWordFrequency(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetWordFrequency("")
+	cl := getClient(t)
+	_, err := cl.GetWordFrequency("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -215,13 +175,8 @@ func TestGetWordFrequency(t *testing.T) {
 
 func TestGetPhrases(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetPhrases("")
+	cl := getClient(t)
+	_, err := cl.GetPhrases("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -238,13 +193,8 @@ func TestGetPhrases(t *testing.T) {
 
 func TestGetEtymologies(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetEtymologies("")
+	cl := getClient(t)
+	_, err := cl.GetEtymologies("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}
@@ -261,13 +211,8 @@ func TestGetEtymologies(t *testing.T) {
 
 func TestGetAudio(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
-	_, err = cl.GetAudio("")
+	cl := getClient(t)
+	_, err := cl.GetAudio("")
 	if err == nil {
 		t.Error("expected error for empty string input")
 	}

@@ -31,12 +31,7 @@ var wotdTests = []struct {
 
 func TestGetWordOfTheDay(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 	for _, testCase := range wotdTests {
 		testResult, err := cl.GetWordOfTheDay(testCase.date)
 		if err != nil && !testCase.errExpected {
@@ -58,14 +53,9 @@ var SearchWordsTestCases = []struct {
 
 func TestSearchWords(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
+	cl := getClient(t)
 
-	cl := NewClient(testAPIKey)
-
-	_, err = cl.SearchWords("")
+	_, err := cl.SearchWords("")
 	if err == nil {
 		t.Error("Expected error for empty query")
 	}
@@ -100,14 +90,9 @@ var RevDictTestCases = []struct {
 
 func TestRevDict(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
+	cl := getClient(t)
 
-	cl := NewClient(testAPIKey)
-
-	_, err = cl.ReverseDictionary("")
+	_, err := cl.ReverseDictionary("")
 	if err == nil {
 		t.Error("Expected error for empty query")
 	}
@@ -134,12 +119,7 @@ func TestRevDict(t *testing.T) {
 
 func TestRandomWord(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 
 	// Expect no result
 	res, _ := cl.RandomWord(MinCorpusCount(2), MaxCorpusCount(1))
@@ -148,7 +128,7 @@ func TestRandomWord(t *testing.T) {
 	}
 
 	// Expect both to return a result of appropriate length
-	res, err = cl.RandomWord(MinLength(5), MaxLength(5))
+	res, err := cl.RandomWord(MinLength(5), MaxLength(5))
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	} else if len(res.Word) != 5 {
@@ -165,12 +145,7 @@ func TestRandomWord(t *testing.T) {
 
 func TestRandomWords(t *testing.T) {
 	t.Parallel()
-	testAPIKey, err := getEnvKey()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	cl := NewClient(testAPIKey)
+	cl := getClient(t)
 
 	// Expect no result
 	res, err := cl.RandomWords(MinCorpusCount(2), MaxCorpusCount(1))

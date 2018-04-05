@@ -3,7 +3,28 @@ package wordnik
 import (
 	"errors"
 	"os"
+	"sync"
+	"testing"
 )
+
+var (
+	cl   *Client
+	once sync.Once
+)
+
+// Helper function for testing which either initializes a Client or returns
+// the already-existing Client
+func getClient(t *testing.T) *Client {
+	once.Do(func() {
+		testAPIKey, err := getEnvKey()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		cl = NewClient(testAPIKey)
+	})
+	return cl
+}
 
 // Helper function for testing which retrieves an API key from
 // the environment variable WORDNIK_API_KEY. Returns an error if
