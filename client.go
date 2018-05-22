@@ -21,13 +21,21 @@ type Client struct {
 
 // NewClient creates a Client with the specified API key. The http.Client
 // component is configured with a 10-second timeout.
-func NewClient(key string) *Client {
+func NewClient(key string, customClients ...*http.Client) *Client {
 	baseURL, err := url.Parse(base)
 	if err != nil {
 		panic(err)
 	}
 
-	return &Client{key, baseURL, &http.Client{Timeout: time.Second * 10}}
+	var httpClient *http.Client
+
+	if len(customClients) > 0 && customClients[0] != nil {
+		httpClient = customClients[0]
+	} else {
+		httpClient = &http.Client{Timeout: time.Second * 10}
+	}
+
+	return &Client{key, baseURL, httpClient}
 }
 
 func (c *Client) formRequest(relativePath *url.URL, vals url.Values, method string, reader ...io.Reader) (*http.Request, error) {
